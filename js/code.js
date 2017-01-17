@@ -4,14 +4,18 @@ var camera, controls, scene, renderer;
 
 var cross;
 
+var loader = new THREE.JSONLoader();
+
 init();
 animate();
 onWindowResize();
 
+
+
 function init() {
 
   camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-  camera.position.z = 500;
+  camera.position.z = 10;
 
   controls = new THREE.OrbitControls( camera );
   controls.addEventListener( 'change', render );
@@ -20,21 +24,17 @@ function init() {
   scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
 
   // world
+  var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+var cube = new THREE.Mesh( geometry, material );
+//scene.add( cube );
+ 	loader.load( "assets/usb_3.json", function(geometry){
+        var material = new THREE.MeshLambertMaterial({color: 0x55B663});
+        mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+      });
 
-  var geometry = new THREE.CylinderGeometry( 0, 10, 30, 4, 1 );
-  var material = new THREE.MeshLambertMaterial( { color:0xffffff, shading: THREE.FlatShading } );
 
-  for ( var i = 0; i < 500; i ++ ) {
-
-    var mesh = new THREE.Mesh( geometry, material );
-    mesh.position.x = ( Math.random() - 0.5 ) * 1000;
-    mesh.position.y = ( Math.random() - 0.5 ) * 1000;
-    mesh.position.z = ( Math.random() - 0.5 ) * 1000;
-    mesh.updateMatrix();
-    mesh.matrixAutoUpdate = false;
-    scene.add( mesh );
-
-  }
 
 
   // lights
